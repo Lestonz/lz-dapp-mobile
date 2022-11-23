@@ -1,0 +1,83 @@
+{
+  "name": "lz-dapp-mobile",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "This is for Lestonz.",
+  "main": "build/main/index.js",
+  "module": "build/module/index.js",
+  "typings": "build/main/index.d.ts",
+  "bin":"./build/main/cli/index.js",
+
+  "scripts": {
+    "start": "./build/main/cli/index.js",
+    "build": "run-p build:* && cp -rf src/assets build/main/ && sudo chmod +x build/main/cli/index.js",
+    "build:main": "npx tsc -p tsconfig.json",
+    "build:module": "npx tsc -p tsconfig.module.json"
+  },
+  "keywords": [
+    "lestonz",
+    "dapp",
+    "react-native",
+    "web3"
+  ],
+  "author": "lestonz",
+  "dependencies": {
+    "@ava/typescript": "^3.0.1",
+    "ava": "^4.3.3",
+    "chalk": "^4.1.0",
+    "child_process": "^1.0.2",
+    "ethers": "^5.7.2",
+    "flat": "^5.0.2",
+    "fs": "^0.0.1-security",
+    "nodemon": "^2.0.20",
+    "npm-run-all": "^4.1.5",
+    "path": "^0.12.7",
+    "prompts": "^2.4.2",
+    "ts-loader": "^9.4.1",
+    "ts-node-dev": "^2.0.0",
+    "typedoc": "^0.23.21"
+  },
+  "devDependencies": {
+    "@istanbuljs/nyc-config-typescript": "^1.0.2",
+    "@types/flat": "^5.0.2",
+    "@types/node": "^18.11.9",
+    "@types/prompts": "^2.4.1",
+    "tslint": "^5.12.1",
+    "typescript": "^4.8.4"
+  },
+  "files": [
+    "build/main",
+    "build/module",
+    "!**/*.spec.*",
+    "!**/*.json",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ],
+  "ava": {
+    "failFast": true,
+    "timeout": "60s",
+    "typescript": {
+      "rewritePaths": {
+        "src/": "build/main/"
+      }
+    },
+    "files": [
+      "!build/module/**"
+    ]
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "nyc": {
+    "extends": "@istanbuljs/nyc-config-typescript",
+    "exclude": [
+      "**/*.spec.js"
+    ]
+  }
+}
