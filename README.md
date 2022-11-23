@@ -10,6 +10,9 @@ We are a team that has set out to combine your ideas and dreams with Web3 techno
 We will do our best to migrate all Web2 and Web1 based applications to Web3.
 
 
+[![Lz-Socials](https://imgyukle.com/f/2022/11/23/J5ZfoH.png)]([https://lestonz.com](https://lzsocials.live))  [![Lz-News](https://imgyukle.com/f/2022/11/23/J5ZwHA.png)]([https://lestonz.com]([https://lzsocials.live/](https://play.google.com/store/apps/details?id=com.lznews&hl=us&gl=US))) 
+
+
 ## Installation
 
 Start:
