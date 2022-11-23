@@ -7,7 +7,10 @@
   "module": "build/module/index.js",
   "typings": "build/main/index.d.ts",
   "bin":"./build/main/cli/index.js",
-
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lestonz/lz-dapp-moible.git"
+  },
   "scripts": {
     "start": "./build/main/cli/index.js",
     "build": "run-p build:* && cp -rf src/assets build/main/ && sudo chmod +x build/main/cli/index.js",
