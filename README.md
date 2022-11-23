@@ -100,10 +100,10 @@ const txSecond ={
 ----------------------------------------
 
 ## Visit to 
-#### lestonz.com
-#### github.com/Lestonz
-#### linkedin.com/company/lestonz
-#### twitter.com/lestonz
+#### [lestonz.com](https://lestonz.com/)
+#### [GitHub](https://www.linkedin.com/company/lestonz)
+#### [LinkedIn](https://www.linkedin.com/company/lestonz?original_referer)
+#### [Twitter](https://twitter.com/lestonz)
 
 #### Don't forget to follow me on Social Media :)
 
