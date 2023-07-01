@@ -1,6 +1,6 @@
 {
   "name": "lz-dapp-mobile",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "license": "MIT",
   "description": "This is for Lestonz.",
   "main": "build/main/index.js",
@@ -9,7 +9,7 @@
   "bin":"./build/main/cli/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Lestonz/lz-dapp-moible.git"
+    "url": "https://github.com/Lestonz/lz-dapp-mobile.git"
   },
   "scripts": {
     "start": "./build/main/cli/index.js",

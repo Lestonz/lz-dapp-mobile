@@ -409,6 +409,7 @@ const preparePackage = (ctx: createContext) =>
       'dependencies.react-native-localhost': '1.0.0',
       'dependencies.react-native-get-random-values': '1.5.0',
       'dependencies.react-native-stream': '0.1.9',
+      'dependencies.react-native-modal': '13.0.1',
       'dependencies.web3': '^1.10.0',
       'devDependencies.@babel/core': '7.15.5',
       'devDependencies.@babel/plugin-proposal-private-property-in-object': '7.15.4',

@@ -3,7 +3,7 @@
   #MakingBetter
 
 
-[![Lestonz](https://imgyukle.com/f/2022/11/23/J5ZYa1.png)](https://lestonz.com)
+[![Lestonz](https://media.licdn.com/dms/image/C4D0BAQEQZU-8dKD7NQ/company-logo_100_100/0/1668028823671?e=1696464000&v=beta&t=SC3EjLrrPmtmYgBWjPsk-j1ADQ9nszhHZGhfIV1LMBQ)](https://lestonz.com)
 
 
 We are a team that has set out to combine your ideas and dreams with Web3 technology. 
@@ -13,12 +13,17 @@ We will do our best to migrate all Web2 and Web1 based applications to Web3.
 ----------------------------------------------------------------------------------
 ## SPONSOR AND PRODUCTS
 
-[![Lz-Socials](https://imgyukle.com/f/2022/11/23/J5ZfoH.png)]([https://lestonz.com](https://lzsocials.live))                                          
+[![Lz-Socials](https://play-lh.googleusercontent.com/UwUwc8yoGBLzXHJTmZ6TlIWrqJs4NNzTzimoOMW29m_h38KwML08-CyFZQHIUe0UZQ=w240-h480-rw)]([https://lestonz.com](https://lzsocials.live))                                          
 
-[![Lz-News](https://imgyukle.com/f/2022/11/23/J5ZwHA.png)]([https://lestonz.com]([https://lzsocials.live/](https://play.google.com/store/apps/details?id=com.lznews&hl=us&gl=US))) 
+[![Lz-News](https://play-lh.googleusercontent.com/gyWjc756crm2CRXwS9mk3a7z17o6Tfvhg_c345l_n3baZFOeJV0OHw9jCqwt-WsijPw=w240-h480-rw)]([https://lestonz.com]([https://lzsocials.live/](https://play.google.com/store/apps/details?id=com.lznews&hl=us&gl=US))) 
 
 ----------------------------------------------------------------------------------
 ## Installation
+
+Dowloading Global:
+```sh
+npm i -g lz-dapp-mobile
+```
 
 Start:
 
