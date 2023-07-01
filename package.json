@@ -1,6 +1,6 @@
 {
   "name": "lz-dapp-mobile",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "license": "MIT",
   "description": "This is for Lestonz.",
   "main": "build/main/index.js",

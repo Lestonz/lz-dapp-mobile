@@ -13,7 +13,7 @@ const line = (message: string, padding: number = defaultPadding) =>
 
 const gfx = `
 
- /$$       /$$$$$$$$  /$$$$$$  /$$$$$$$$/$$$$$$  /$$   /$$ /$$$$$$$$
+  /$$       /$$$$$$$$  /$$$$$$  /$$$$$$$$/$$$$$$  /$$   /$$ /$$$$$$$$
 | $$      | $$_____/ /$$__  $$|__  $$__/$$__  $$| $$$ | $$|_____ $$ 
 | $$      | $$      | $$  |__/   | $$ | $$  | $$| $$$$| $$     /$$/ 
 | $$      | $$$$$   |  $$$$$$    | $$ | $$  | $$| $$ $$ $$    /$$/  
@@ -42,7 +42,7 @@ function validateUriScheme(value: string): boolean {
   console.log();
   line(chalk.red.bgWhite.bold`Don't forget to follow me on Social Media :)`);
   console.log();
-  line(chalk.green.bold`Let's Start react-native-lz-dapp!`);
+  line(chalk.green.bold`Let's Start react-native-lz-dapp-v2!`);
 
 
   console.log();
@@ -55,7 +55,7 @@ function validateUriScheme(value: string): boolean {
       type: 'text',
       name: 'name',
       message: 'What is your lz-dapp name?',
-      initial: 'react-native-lz-dapp',
+      initial: 'react-native-lz-dapp-v2',
       validate: (value) => {
         if (typeof value !== 'string') {
           return `Expected string, encountered ${typeof value}.`;

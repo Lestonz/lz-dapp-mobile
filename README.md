@@ -86,10 +86,11 @@ Open frontend/App.js file
 
 ```sh
 const tx = {
-  from: `${connector.accounts}`, 
+  from: address, 
   to: `${YOUR_SMART_CONTRACT_ADDRESS}`,
   data: `${contractData}`,
-  value:`${value}`    
+  value:`${value}`,
+  gasPrice: web3Provider.utils.toWei('10', 'gwei')    
 }
 ```
 or

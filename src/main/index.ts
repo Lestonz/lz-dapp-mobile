@@ -179,18 +179,17 @@ const { registerRootComponent, scheme } = require('expo');
 const { default: App } = require('./frontend/App');
 
 const { default: AsyncStorage } = require('@react-native-async-storage/async-storage');
-const { withWalletConnect } = require('@walletconnect/react-native-dapp');
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in the Expo client or in a native build,
 // the environment is set up appropriately
-registerRootComponent(withWalletConnect(App, {
+registerRootComponent(App, {
   redirectUrl: Platform.OS === 'web' ? window.location.origin : \`\${scheme}://\`,
   storageOptions: {
     asyncStorage: AsyncStorage,
   },
-}));
-/* dapp-end */
+});
+/* lz-dapp-end */
     `.trim()
   );
 };
@@ -398,7 +397,8 @@ const preparePackage = (ctx: createContext) =>
       "scripts.verify:truffle" :"npx hardhat verify --network truffle",
       // dependencies
       'dependencies.@react-native-async-storage/async-storage': '1.17.3',
-      'dependencies.@walletconnect/react-native-dapp': '1.7.8',
+      'dependencies.@walletconnect/modal-react-native': '1.0.0-rc.3',
+      'dependencies.@react-native-clipboard/clipboard': '1.11.2',
       'dependencies.react-native-svg': '9.6.4',
       'dependencies.base-64': '1.0.0',
       'dependencies.buffer': '6.0.3',
@@ -409,7 +409,7 @@ const preparePackage = (ctx: createContext) =>
       'dependencies.react-native-localhost': '1.0.0',
       'dependencies.react-native-get-random-values': '1.5.0',
       'dependencies.react-native-stream': '0.1.9',
-      'dependencies.web3': '1.7.4',
+      'dependencies.web3': '^1.10.0',
       'devDependencies.@babel/core': '7.15.5',
       'devDependencies.@babel/plugin-proposal-private-property-in-object': '7.15.4',
       'devDependencies.@babel/preset-env': '7.15.6',
@@ -420,8 +420,6 @@ const preparePackage = (ctx: createContext) =>
       'devDependencies.commitizen': '4.2.3',
       'devDependencies.cz-conventional-changelog': '^3.2.0',
       'devDependencies.dotenv': '8.2.0',
-      'devDependencies.enzyme': '3.11.0',
-      'devDependencies.enzyme-adapter-react-16': '1.15.6',
       'devDependencies.husky': '4.3.8',
       'devDependencies.prettier': '2.2.1',
       'devDependencies.platform-detect': '3.0.1',
@@ -448,7 +446,6 @@ const preparePackage = (ctx: createContext) =>
       'devDependencies.react-test-renderer': '17.0.1',
       'devDependencies.ts-node': '9.1.1',
       'devDependencies.@nomiclabs/hardhat-etherscan': '^3.1.2',
-      'devDependencies.ethers': '^5.7.2',
       // react-native
       'react-native.stream': 'react-native-stream',
       'react-native.crypto': 'react-native-crypto',
@@ -605,7 +602,7 @@ const shouldWriteConfigJS = (ctx: createContext) => {
   fs.writeFileSync(config, `
 
   export const YOUR_SMART_CONTRACT_ADDRESS = "0xB7738e7C6471EC2443D7DBfD3581bCCE12E81012"
-  export const YOUR_PROVIDER_LINK_GOERLI = "https://goerli.infura.io/v3/jyagsudhausdhoıashdxxx"
+  export const YOUR_PROVIDER_LINK_GOERLI = "https://goerli.infura.io/v3/YourProviderID"
   
   `.trim() );
   fs.copyFileSync(config, exampleConfig);
@@ -656,23 +653,23 @@ const shouldPrepareExample = (ctx: createContext) => {
   } = ctx;
 
   const contracts = path.resolve(projectDir, 'contracts');
-  const patches = path.resolve(projectDir, 'patches');
+
 
   !fs.existsSync(contracts) && fs.mkdirSync(contracts);
-  !fs.existsSync(patches) && fs.mkdirSync(patches);
+
   !fs.existsSync(testsDir) && fs.mkdirSync(testsDir);
 
   const contractsTestDir = path.resolve(testsDir, 'contracts');
-  const frontendTestDir = path.resolve(testsDir, 'frontend');
+ 
 
   fs.mkdirSync(contractsTestDir);
-  fs.mkdirSync(frontendTestDir);
+
 
   fs.writeFileSync(path.resolve(contractsTestDir, '.gitkeep'), '');
-  fs.writeFileSync(path.resolve(frontendTestDir, '.gitkeep'), '');
+
 
   const contractTest = path.resolve(contractsTestDir, 'HelloLestonz.test.js');
-  const frontendTest = path.resolve(frontendTestDir, 'App.test.tsx');
+
 
   fs.writeFileSync(
     contractTest,
@@ -690,25 +687,6 @@ describe("HelloLestonz", function() {
   });
 });
     `
-  );
-
-  fs.writeFileSync(
-    frontendTest,
-    `
-import Enzyme from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
-import React from 'react';
-
-import App from '../../frontend/App';
-
-Enzyme.configure({ adapter: new Adapter() });
-
-test('renders correctly', () => {
-  const wrapper = Enzyme.shallow(<App />);
-
-  expect(wrapper.find({ testID: 'tid-message'}).contains('Loading...')).toBe(true);
-});
-    `.trim(),
   );
 
   const contract = path.resolve(contracts, 'HelloLestonz.sol');
@@ -766,197 +744,310 @@ module.exports = {
     path.resolve(srcDir, 'App.js'),
     `
 
-    /* 
-        It so important; some where needs to use "Dollar sign and curly braces". 
-        If you see '₺{}', it means "Dollar sign and curly braces",
-        Enjoy codding with lz-DApp...  
-    */
-    import { YOUR_PROVIDER_LINK_GOERLI, YOUR_SMART_CONTRACT_ADDRESS } from '../config';
-    import { useWalletConnect } from '@walletconnect/react-native-dapp';
-    import React, {useState, useEffect, useCallback, useMemo } from 'react';
-    import {SafeAreaView, Text, TouchableOpacity, View, Image, TextInput, ScrollView } from 'react-native';
-    
-    import Web3 from 'web3';
-    import { ethers } from 'ethers';
-    import HelloLestonz from '../artifacts/contracts/HelloLestonz.sol/HelloLestonz.json';
-    
-    
-    const appIcon = require('../assets/image/app-icon.png') 
-    
-    export default function App() {
-      const connector = useWalletConnect();
-      const [yourNumber, setYourNumber]= useState(0);
-      const [readDataNumber, setReadDataNumber] = useState(0)
-      const userAddress = connector.accounts  /* '₺{}' */
-    
-      const web3 = useMemo(
-        () => new Web3(new Web3.providers.HttpProvider(YOUR_PROVIDER_LINK_GOERLI)),[]
-      );
-    
-      const myContract = new web3.eth.Contract(HelloLestonz.abi, YOUR_SMART_CONTRACT_ADDRESS )
-    
-      useEffect(() => {
-        myContract
-      }, []);
-    
-      
-    
-    
-      const giveNumber = useCallback( async (number) => {
-          try {
-            console.log(number)
-            const contractData =  myContract.methods.giveNumber(Number(number)).encodeABI() //  sometimes you need to convert to string()
-            console.log(contractData)
-            const value = ethers.utils.parseEther(0.0.toString())._hex
-            /*It should be hexadecimal in tx */
-            const tx = {
-              from: connector.accounts, // Required  /* '₺{}' */
-              to: YOUR_SMART_CONTRACT_ADDRESS, // Required /* '₺{}' */
-              data: contractData, // Required /* '₺{}' */
-              // gasPrice: "0x02540be400", // Optional
-              // gasLimit: "0x9c40", // Optional
-              value: value, // Optional /* '₺{}' */
-              // nonce: "0x0114" // Optional
-            };
-    
-            const txSecond ={
-              data: '0x',
-              from: '0x8B6FE676217eEE2C9Cf484203Cb8855ca85eB07D',
-              gas: '0x9c40',
-              gasPrice: '0x02540be400',
-              nonce: '0x0114',
-              to: '0xa979143B16a3C61b317385C7dC3C269503B88c92',
-              value: '0x00',
-            };
-    
-            await connector.sendTransaction(tx);
-          } catch (error) {
-            console.log(error);
-          }
-        },[]);
-    
-        const readNumber = useCallback(async () => {
-          try {
-            const contractData = await myContract.methods.readNumber().call()
-            setReadDataNumber(contractData)
-            return readDataNumber;
-          } catch (error) {
-            console.log(error);
-          }
-        },[]);
-    
-      const connectWallet = useCallback(() => {
-        return connector.connect();
-      }, [connector]);
-    
-      const disConnectWallet = useCallback(() => {
-        return connector.killSession();
-      }, [connector]);
-      return (
-        <>
-          <SafeAreaView>
-          </SafeAreaView>
-          <ScrollView>
-           <View style={{alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
-            <Image 
-              source={appIcon}
-              resizeMode="cover"
-              style={{
-                width:60,
-                height:60,
-                marginVertical:10
-              }}
+import { ScrollView, TextInput, Text, SafeAreaView, TouchableOpacity, View, Image, Linking } from 'react-native';
+import { WalletConnectModal, useWalletConnectModal } from '@walletconnect/modal-react-native';
+import { YOUR_PROVIDER_LINK_GOERLI, YOUR_SMART_CONTRACT_ADDRESS } from '../config';
+import React, { useState, useEffect, useMemo } from 'react';
+import { scheme } from 'expo'
+import Web3 from 'web3';
+import Clipboard from '@react-native-clipboard/clipboard';
+import HelloLestonz from '../artifacts/contracts/HelloLestonz.sol/HelloLestonz.json';
+
+const appIcon = require('../assets/image/app-icon.png')
+
+/** You should take a projectId and providerMetadata from walletconnect-v2 panel */
+const projectId = 'YourWalletConnectProjectId';
+
+const providerMetadata = {
+name: 'Lestonz',
+description: 'Lestonz DApp',
+url: 'https://react-web3wallet.vercel.app',
+icons: ['https://imagedelivery.net/_aTEfDRm7z3tKgu9JhfeKA/0c24a66f-00f0-4a6d-f4bd-efab7de7a200/lg'],
+redirect: {
+native: \`\${scheme}://\`
+}
+};
+
+export const sessionParams = {
+namespaces: {
+eip155: {
+  methods: [
+    'eth_sendTransaction',
+    'eth_sign',
+    'personal_sign',
+    'eth_signTypedData',
+  ],
+  chains: ['eip155:1'], // You should choose your network params.This is Ethereum Mainnet
+  events: ['chainChanged', 'accountsChanged'],
+  rpcMap: {},
+},
+},
+optionalNamespaces: {
+eip155: {
+  methods: [
+    'eth_sendTransaction',
+    'eth_sign',
+    'personal_sign',
+    'eth_signTypedData',
+  ],
+  chains: ['eip155:5'], // You should choose your network params.This is Ethereum Goerli
+  events: ['chainChanged', 'accountsChanged'],
+  rpcMap: {},
+},
+},
+};
+
+
+function App() {
+const { open, provider, isConnected, address } = useWalletConnectModal();
+const [yourNumber, setYourNumber] = useState(0);
+const [readDataNumber, setReadDataNumber] = useState(0)
+
+//For smartContract provider. If you are using testnet, you should use diffrent provider. 
+const web3ProviderContract = useMemo(
+() => new Web3(new Web3.providers.HttpProvider(YOUR_PROVIDER_LINK_GOERLI))
+)
+
+// For wallet connection provider
+const web3Provider = useMemo(
+() => new Web3(provider ? new Web3(provider) : new Web3.providers.HttpProvider(YOUR_PROVIDER_LINK_GOERLI)), [provider]
+);
+
+// For Smart Contract Uploding
+const myContract = new web3ProviderContract.eth.Contract(HelloLestonz.abi, YOUR_SMART_CONTRACT_ADDRESS)
+
+useEffect(() => {
+myContract
+}, []);
+
+const onCopy = (value) => {
+Clipboard.setString(value);
+};
+
+const connectYourWallet = async () => {
+return open();
+};
+
+const disconnectYourWallet = async () => {
+return provider?.disconnect();
+};
+
+const writeData = async () => {
+try {
+  console.log(yourNumber)
+  const contractData = await myContract.methods.giveNumber(yourNumber).encodeABI()
+  const tx = {
+    from: address, // Sender account address
+    to: \`\${YOUR_SMART_CONTRACT_ADDRESS}\`, // Recipient account address
+    value: web3Provider.utils.toWei('0', 'gwei'), // Amount to be sent (0.01 ether)
+    gasPrice: web3Provider.utils.toWei('10', 'gwei'), // Gas price
+    data: \`\${contractData}\`, // Transaction data
+
+  };
+  const transaction = await web3Provider.eth.sendTransaction(tx);
+  console.log('Transaction:', transaction);
+
+} catch (error) {
+  console.log("Error from writing data:", error);
+}
+};
+
+const readData = async () => {
+
+if (myContract) {
+  try {
+    const contractData = await myContract.methods.readNumber().call()
+    setReadDataNumber(contractData)
+    return readDataNumber;
+  } catch (error) {
+    console.log("Error from reading data", error)
+  }
+} else {
+  console.log("The contract could not be loaded or found.")
+}
+}
+
+const signMessage = async () => {
+
+if (!web3Provider) {
+  throw new Error('web3Provider not connected');
+}
+const message = "Hello, welcome to Lestonz DApp! Do you want to connect this DApp?";
+await web3Provider.eth.personal.sign(message, address, " ");
+
+};
+
+const sendEther = async () => {
+try {
+  const tx = {
+    from: address, // Sender account address
+    to: '0xBcC732b0acE59557FE2C8D86Dbca6e6d738b043c', // Recipient account address
+    value: web3Provider.utils.toWei('10000000', 'gwei'), // Amount to be sent (0.01 ether)
+    gasPrice: web3Provider.utils.toWei('10', 'gwei'), // Gas price
+    data: '0x', // Transaction data
+  };
+
+  const transaction = await web3Provider.eth.sendTransaction(tx);
+  console.log('Transaction:', transaction);
+
+} catch (error) {
+  console.log('Error from Send ETH:', error);
+}
+};
+
+return (
+<>
+  <SafeAreaView></SafeAreaView>
+  <ScrollView>
+    <View style={{
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center'
+    }} >
+      <Image
+        source={appIcon}
+        resizeMode="cover"
+        style={{
+          width: 60,
+          height: 60,
+          marginVertical: 10
+        }}
+      />
+      <Text style={{ fontSize: 24, fontWeight: 'bold' }}>Welcome to Lz-DApp-V2</Text>
+      <Text style={{ fontSize: 20, fontWeight: 'normal' }} >from Lestonz</Text>
+      <TouchableOpacity
+        style={{
+          width: '80%',
+          height: 60,
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: '#000000',
+          marginVertical: 10,
+          borderRadius: 10
+        }}
+        onPress={() => Linking.openURL('https://lestonz.com')}
+      >
+        <Text style={{ color: '#fff', fontSize: 24 }} >
+         LESTONZ
+        </Text>
+      </TouchableOpacity>
+      {
+        !isConnected ? (
+          <TouchableOpacity
+            style={{
+              width: '80%',
+              height: 60,
+              justifyContent: 'center',
+              alignItems: 'center',
+              backgroundColor: '#5396FF',
+              marginVertical: 10,
+              borderRadius: 10
+            }}
+            onPress={connectYourWallet}
+          >
+            <Text style={{ color: '#fff', fontSize: 24 }} >
+              Connect Your Wallet
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <>
+            <Text style={{ fontSize: 24, fontWeight: 'bold' }} > Your Wallet Address </Text>
+            <Text selectable style={{ fontSize: 20, fontWeight: 'normal', width: '80%', textAlign: 'center' }} >{address}</Text>
+            <TextInput
+              style={{ height: 60, borderWidth: 1, width: '80%', marginVertical: 20, borderRadius: 10, fontSize: 20, paddingHorizontal: 10 }}
+              onChangeText={(text) => setYourNumber(text)}
+              value={yourNumber.toString()}
+              placeholder="Enter A number"
+              keyboardType="numeric"
             />
-            <Text style={{fontSize:24, fontWeight:'bold'}}>Welcome to Lz-DApp</Text>
-            <Text style={{fontSize:20, fontWeight:'normal'}} >from Lestonz</Text>
-            {
-              !connector.connected && 
-              (
-                <TouchableOpacity  
-                  style={{
-                    width:'80%',
-                    height:60,
-                    justifyContent:'center',
-                    alignItems:'center',
-                    backgroundColor: '#5396FF',
-                    marginVertical:10,
-                    borderRadius:10
-                  }}
-                  onPress={() => connectWallet()}
-                >
-                    <Text style={{color:'#fff', fontSize:24}} >Connect Your Wallet</Text>
-                </TouchableOpacity>
-              )
-            }
-            {
-              !!connector.connected && 
-              (
-                <>
-                    <Text style={{fontSize:24, fontWeight:'bold'}} > Your Wallet Address </Text>
-                    <Text style={{fontSize:20, fontWeight:'normal', width:'80%', textAlign:'center'  }} > {userAddress} </Text>
-    
-                    <TextInput
-                      style={{ height:60, borderWidth:1, width:'80%', marginVertical:10, borderRadius:10 }}
-                      onChangeText={(num) => setYourNumber(num)}
-                      value={yourNumber}
-                      placeholder="Enter A number"
-                      keyboardType="numeric"
-                    />
-                   <TouchableOpacity  
-                      style={{
-                        width:'80%',
-                        height:60,
-                        justifyContent:'center',
-                        alignItems:'center',
-                        backgroundColor: '#963F74',
-                        marginVertical:10,
-                        borderRadius:10
-                      }}
-                      onPress={() => giveNumber(yourNumber)}
-                    >
-                        <Text style={{color:'#fff', fontSize:24}} >Send Number</Text>
-                    </TouchableOpacity>
-    
-                    <TouchableOpacity  
-                      style={{
-                        width:'80%',
-                        height:60,
-                        justifyContent:'center',
-                        alignItems:'center',
-                        backgroundColor: '#00BAFF',
-                        marginVertical:10,
-                        borderRadius:10
-                      }}
-                      onPress={() => readNumber()}
-                    >
-                        <Text style={{color:'#fff', fontSize:24}} >Read Number</Text>
-                    </TouchableOpacity>
-                    
-                    <Text style={{fontSize:20, fontWeight:'normal' }} >Your number is</Text>
-                    <Text style={{fontSize:20, fontWeight:'normal' }} >{readDataNumber}</Text>
-                    <TouchableOpacity  
-                      style={{
-                        width:'80%',
-                        height:60,
-                        justifyContent:'center',
-                        alignItems:'center',
-                        backgroundColor: '#DF0000',
-                        marginVertical:10,
-                        borderRadius:10
-                      }}
-                      onPress={() => disConnectWallet()}
-                    >
-                        <Text style={{color:'#fff', fontSize:24}} >DISCONNECT</Text>
-                    </TouchableOpacity>
-                </>
-              )
-            }
-    
-            </View>
-        </ScrollView>
-        </>
-      );
-    }
+            <TouchableOpacity
+              style={{
+                width: '80%',
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#963F74',
+                marginVertical: 10,
+                borderRadius: 10
+              }}
+              onPress={writeData}
+            >
+              <Text style={{ color: '#fff', fontSize: 24 }} >Send Number</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: '80%',
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#00BA00',
+                marginVertical: 10,
+                borderRadius: 10
+              }}
+              onPress={readData}
+            >
+              <Text style={{ color: '#fff', fontSize: 24 }} >Read</Text>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 20, fontWeight: 'normal' }} >Your number is</Text>
+            <Text style={{ fontSize: 20, fontWeight: 'normal' }} >{readDataNumber}</Text>
+            <TouchableOpacity
+              style={{
+                width: '80%',
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#00BAFF',
+                marginVertical: 10,
+                borderRadius: 10
+              }}
+              onPress={signMessage}
+            >
+              <Text style={{ color: '#fff', fontSize: 24 }} >Sign In Message</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: '80%',
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#332A45',
+                marginVertical: 10,
+                borderRadius: 10,
+              }}
+              onPress={sendEther}
+            >
+              <Text style={{ color: '#fff', fontSize: 24 }} >Send ETH</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{
+                width: '80%',
+                height: 60,
+                justifyContent: 'center',
+                alignItems: 'center',
+                backgroundColor: '#DF0000',
+                marginVertical: 10,
+                borderRadius: 10
+              }}
+              onPress={disconnectYourWallet}
+            >
+              <Text style={{ color: '#fff', fontSize: 24 }} >DISCONNECT</Text>
+            </TouchableOpacity>
+          </>
+        )
+      }
+    </View>
+  </ScrollView>
+  <WalletConnectModal
+    projectId={projectId}
+    providerMetadata={providerMetadata}
+    sessionParams={sessionParams}
+    onCopyClipboard={onCopy}
+  />
+</>
+)
+}
+
+export default App;
     `.trim()
   );
 
